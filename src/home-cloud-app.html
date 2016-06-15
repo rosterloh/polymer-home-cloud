@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="hc-login.html">
+<link rel="import" href="hc-toolbar.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+
+<dom-module id="home-cloud-app">
+
+  <template>
+
+    <style include="hc-app-shared-styles"></style>
+
+    <hc-toolbar
+      signed-in="[[signedIn]]"
+      on-sign-out="signOut">
+    </hc-toolbar>
+
+    <hc-login
+        on-sign-in="signIn"
+        signed-in="[[signedIn]]"
+        disabled="[[!online]]">
+    </hc-login>
+
+    <firebase-auth
+        id="auth"
+        app-name="home-cloud"
+        provider="google"
+        signed-in="{{signedIn}}"
+        user="{{user}}">
+    </firebase-auth>
+
+    <paper-fab
+      icon="add"
+      on-tap="create"
+      disabled="[[!online]]"
+      aria-label="Add note">
+    </paper-fab>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'home-cloud-app',
+
+      signIn: function () {
+        this.$.auth.signInWithPopup()
+          .then(function (response) { console.log('Auth successful'); })
+          .catch(function (error) { console.log('Auth error: ' + error); });
+      },
+    });
+  </script>
+
+</dom-module>
